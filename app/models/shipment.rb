@@ -9,22 +9,21 @@ class Shipment < ApplicationRecord
   # - items_order: A string indicating the order of sorting ('ascending' or 'descending').
   # Returns: An array of hashes, each hash containing the description and count of items.
   def group_shipment_items(items_order)
-    order_clause = determine_order_clause(items_order)
-    grouped_items = shipment_items.group(:description).select('description, COUNT(*) as count')
-    grouped_items = grouped_items.order("count #{order_clause}") if order_clause.present?
+    order_condition = determine_items_ordering(items_order)
+    grouped_items = shipment_items.group(:description).select('description, COUNT(*) as count').order(order_condition)
     grouped_items.map { |item| { description: item.description, count: item.count } }
   end
 
   private
 
-  # Determines the order clause based on the items_order parameter.
+  # Determines the shipment items ordering based on the items_order parameter.
   # Parameters:
   # - items_order: A string indicating the order of sorting ('ascending' or 'descending').
-  # Returns: A string representing the order clause ('ASC' or 'DESC') or an empty string if no sorting is needed.
-  def determine_order_clause(items_order)
+  # Returns: A string representing the ordering ('count ASC' or 'count DESC') or an empty string if no sorting is needed
+  def determine_items_ordering(items_order)
     items_order = items_order.to_s.strip.downcase
-    return 'ASC' if items_order == 'ascending'
-    return 'DESC' if items_order == 'descending'
+    return 'count ASC' if items_order == 'ascending'
+    return 'count DESC' if items_order == 'descending'
 
     ''
   end

@@ -2,56 +2,56 @@ require "rails_helper"
 
 RSpec.describe Shipment, type: :model do
   # write your tests here
-  describe '#determine_order_clause' do
+  describe '#determine_items_ordering' do
     let(:shipment) { Shipment.new }
 
     it "returns 'ASC' for 'ascending' items_order" do
-      result = shipment.send(:determine_order_clause, 'ascending')
-      expect(result).to eq('ASC')
+      result = shipment.send(:determine_items_ordering, 'ascending')
+      expect(result).to eq('count ASC')
     end
 
     it "returns 'DESC' for 'descending' items_order" do
-      result = shipment.send(:determine_order_clause, 'descending')
-      expect(result).to eq('DESC')
+      result = shipment.send(:determine_items_ordering, 'descending')
+      expect(result).to eq('count DESC')
     end
 
     it "returns 'ASC' for case-insensitive 'ascending' items_order" do
-      result = shipment.send(:determine_order_clause, 'ASCENDING')
-      expect(result).to eq('ASC')
+      result = shipment.send(:determine_items_ordering, 'ASCENDING')
+      expect(result).to eq('count ASC')
     end
 
     it "returns 'DESC' for case-insensitive 'descending' items_order" do
-      result = shipment.send(:determine_order_clause, 'DESCENDING')
-      expect(result).to eq('DESC')
+      result = shipment.send(:determine_items_ordering, 'DESCENDING')
+      expect(result).to eq('count DESC')
     end
 
     it "returns 'ASC' for leading-trailing spaces case-insensitive 'ascending' items_order" do
-      result = shipment.send(:determine_order_clause, '   AScENdinG   ')
-      expect(result).to eq('ASC')
+      result = shipment.send(:determine_items_ordering, '   AScENdinG   ')
+      expect(result).to eq('count ASC')
     end
 
     it "returns 'DESC' for leading-trailing spaces case-insensitive 'descending' items_order" do
-      result = shipment.send(:determine_order_clause, '  DeSceNDiNG ')
-      expect(result).to eq('DESC')
+      result = shipment.send(:determine_items_ordering, '  DeSceNDiNG ')
+      expect(result).to eq('count DESC')
     end
 
     it 'returns an empty string for any other items_order' do
-      result = shipment.send(:determine_order_clause, 'random_order')
+      result = shipment.send(:determine_items_ordering, 'random_order')
       expect(result).to eq('')
     end
 
     it 'returns an empty string for nil items_order' do
-      result = shipment.send(:determine_order_clause, nil)
+      result = shipment.send(:determine_items_ordering, nil)
       expect(result).to eq('')
     end
 
     it 'returns an empty string for empty string items_order' do
-      result = shipment.send(:determine_order_clause, '')
+      result = shipment.send(:determine_items_ordering, '')
       expect(result).to eq('')
     end
 
     it 'returns an empty string for numeric items_order' do
-      result = shipment.send(:determine_order_clause, 123)
+      result = shipment.send(:determine_items_ordering, 123)
       expect(result).to eq('')
     end
   end
