@@ -1,3 +1,3 @@
 class ShipmentItem < ApplicationRecord
-  belongs_to :shipments
+  belongs_to :shipment
 end

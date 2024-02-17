@@ -1,5 +1,5 @@
 class Shipment < ApplicationRecord
-  belongs_to :companies
+  belongs_to :company
   has_many :shipment_items
 
   # Groups the shipment items by description and returns an array of hashes representing
