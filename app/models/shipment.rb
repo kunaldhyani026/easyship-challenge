@@ -22,6 +22,7 @@ class Shipment < ApplicationRecord
   # - items_order: A string indicating the order of sorting ('ascending' or 'descending').
   # Returns: A string representing the order clause ('ASC' or 'DESC') or an empty string if no sorting is needed.
   def determine_order_clause(items_order)
+    items_order = items_order.to_s.strip.downcase
     return 'ASC' if items_order == 'ascending'
     return 'DESC' if items_order == 'descending'
 
