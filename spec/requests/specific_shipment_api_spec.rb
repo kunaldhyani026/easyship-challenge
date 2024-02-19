@@ -138,7 +138,7 @@ RSpec.describe "Specific Shipment API", type: :request do
         # asserting that response body have error details
         body = response_body
         expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Missing required parameters 'id' and 'company_id'")
+        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
       end
 
       it 'returns a bad request response when company id is invalid : string with only spaces' do
@@ -152,7 +152,7 @@ RSpec.describe "Specific Shipment API", type: :request do
         # asserting that response body have error details
         body = response_body
         expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Missing required parameters 'id' and 'company_id'")
+        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
       end
 
       it 'returns a bad request response when both id and company id is invalid' do
@@ -166,7 +166,35 @@ RSpec.describe "Specific Shipment API", type: :request do
         # asserting that response body have error details
         body = response_body
         expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Missing required parameters 'id' and 'company_id'")
+        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+      end
+
+      it 'returns a bad request response when company id invalid : integer string with spaces' do
+        # Trigger API call
+        headers = { 'Content-Type' => 'application/json' }
+        get '/companies/%204/shipments/1', headers: headers
+
+        # asserting that response status is 400
+        expect(response.status).to eq(400)
+
+        # asserting that response body have error details
+        body = response_body
+        expect(body['error']).to eq('Bad Request')
+        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+      end
+
+      it 'returns a bad request response when shipment id invalid : integer string with spaces' do
+        # Trigger API call
+        headers = { 'Content-Type' => 'application/json' }
+        get '/companies/4/shipments/%201%20', headers: headers
+
+        # asserting that response status is 400
+        expect(response.status).to eq(400)
+
+        # asserting that response body have error details
+        body = response_body
+        expect(body['error']).to eq('Bad Request')
+        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
       end
     end
   end

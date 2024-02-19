@@ -5,7 +5,7 @@ class ShipmentsController < ApplicationController
 
   def show
     validator = ShipmentParamsValidator.new(params)
-    return render_bad_request("Missing required parameters 'id' and 'company_id'") unless validator.valid_for_show_action?
+    return render_bad_request("Bad request parameters 'id' and 'company_id'") unless validator.valid_for_show_action?
 
     @shipment = Shipment.find_by(id: params[:id], company_id: params[:company_id])
     return if @shipment
