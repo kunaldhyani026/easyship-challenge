@@ -79,8 +79,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Resource not found')
-        expect(body['message']).to eq("Couldn't find Shipment with 'id'=1 and 'company_id'=4")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('resource_not_found')
+        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=1 and 'company_id'=4")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
 
       it 'returns a not found response when a shipment with specified id is not present' do
@@ -101,8 +103,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Resource not found')
-        expect(body['message']).to eq("Couldn't find Shipment with 'id'=5 and 'company_id'=1")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('resource_not_found')
+        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=5 and 'company_id'=1")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
 
       it 'returns a not found response when a shipment with specified id and company_id is not present' do
@@ -121,12 +125,14 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Resource not found')
-        expect(body['message']).to eq("Couldn't find Shipment with 'id'=5 and 'company_id'=4")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('resource_not_found')
+        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=5 and 'company_id'=4")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
     end
 
-    context 'when params are not valid' do
+    context 'when path params are not valid' do
       it 'returns a bad request response when shipment id invalid : empty string' do
         # Trigger API call
         headers = { 'Content-Type' => 'application/json' }
@@ -137,8 +143,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('invalid_request')
+        expect(body['error']['message']).to eq("The request param are not valid.")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
 
       it 'returns a bad request response when company id is invalid : string with only spaces' do
@@ -151,8 +159,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('invalid_request')
+        expect(body['error']['message']).to eq("The request param are not valid.")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
 
       it 'returns a bad request response when both id and company id is invalid' do
@@ -165,8 +175,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('invalid_request')
+        expect(body['error']['message']).to eq("The request param are not valid.")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
 
       it 'returns a bad request response when company id invalid : integer string with spaces' do
@@ -179,8 +191,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('invalid_request')
+        expect(body['error']['message']).to eq("The request param are not valid.")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
 
       it 'returns a bad request response when shipment id invalid : integer string with spaces' do
@@ -193,8 +207,10 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body['error']).to eq('Bad Request')
-        expect(body['message']).to eq("Bad request parameters 'id' and 'company_id'")
+        expect(body.has_key?('error')).to eq(true)
+        expect(body['error']['code']).to eq('invalid_request')
+        expect(body['error']['message']).to eq("The request param are not valid.")
+        expect(body['error']['type']).to eq("invalid_request_error")
       end
     end
   end

@@ -1,25 +1,28 @@
 class ShipmentsController < ApplicationController
+  before_action :validate_params, only: [:show]
+
   def index
     @shipments = Shipment.all
   end
 
   def show
-    validator = ShipmentParamsValidator.new(params)
-    return render_bad_request("Bad request parameters 'id' and 'company_id'") unless validator.valid_for_show_action?
-
     @shipment = Shipment.find_by(id: params[:id], company_id: params[:company_id])
     return if @shipment
 
-    render_resource_not_found("Couldn't find Shipment with 'id'=#{params[:id]} and 'company_id'=#{params[:company_id]}")
+    error_message = "Couldn't find Shipment with 'id'=#{params[:id]} and 'company_id'=#{params[:company_id]}"
+    render_error('resource_not_found', 'invalid_request_error', error_message, 404)
   end
 
   private
 
-  def render_bad_request(message)
-    render json: { error: 'Bad Request', message: message }, status: :bad_request
+  def validate_params
+    validator = ShipmentParamsValidator.new(params)
+    return if validator.validate
+
+    render_error('invalid_request', 'invalid_request_error', 'The request param are not valid.', 400)
   end
 
-  def render_resource_not_found(message)
-    render json: { error: 'Resource not found', message: message }, status: :not_found
+  def render_error(code, type, message, http_status_code)
+    render json: { error: { code: code, message: message, type: type } }, status: http_status_code
   end
 end
