@@ -76,7 +76,79 @@ RSpec.describe ShipmentParamsValidator do
       end
     end
 
-    context 'when action is not show' do
+    context 'when action is tracking' do
+      it 'returns true when both id and company_id are valid postive integers' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: 1, company_id: 2 })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns true when both id and company_id are valid integers in string format' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: '1', company_id: '-2' })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns true when both id and company_id are valid negative integers' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: -1, company_id: -2 })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns true when both id and company_id are valid integers' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: -1, company_id: 12 })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns false when either id and company_id have space string character' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: 1, company_id: ' 2' })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either id and company_id have string character' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: '1bad', company_id: 'invalid' })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either id and company_id have integer string starting with 0' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: '01', company_id: 2 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either id and company_id is float' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: 1, company_id: 2.56 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either id and company_id is empty string' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: 1, company_id: '' })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either id and company_id is string with spaces ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: 1, company_id: '  ' })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when id is missing ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', company_id: 1 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when company_id is missing ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking',  id: 1 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when id is nil ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: nil, company_id: 2 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when company_id is nil ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', id: 12, company_id: nil })
+        expect(validator.validate).to eq(false)
+      end
+    end
+
+    context 'when action neither show nor tracking' do
       it 'returns false' do
         validator = ShipmentParamsValidator.new({ action: 'other' })
         expect(validator.validate).to eq(false)
