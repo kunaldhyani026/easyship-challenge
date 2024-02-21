@@ -27,14 +27,17 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # assert that expected body values are received
         body = response_body
-        expect(body.has_key?('shipment')).to eq(true)
-        expect(body['shipment']['company_id']).to eq(1)
-        expect(body['shipment']['destination_country']).to eq('UK')
-        expect(body['shipment']['origin_country']).to eq('IND')
-        expect(body['shipment']['tracking_number']).to eq('IND1234UK')
-        expect(body['shipment']['slug']).to eq('dhl')
-        expect(body['shipment']['created_at']).to eq('2018 June 27 at 4:49 AM (Wednesday)')
-        expect(body['shipment']['items']).to eq([])
+        expect(body).to eq({
+                             'shipment' => {
+                               'company_id' => 1,
+                               'destination_country' => 'UK',
+                               'origin_country' => 'IND',
+                               'tracking_number' => 'IND1234UK',
+                               'slug' => 'dhl',
+                               'created_at' => '2018 June 27 at 4:49 AM (Wednesday)',
+                               'items' => []
+                             }
+                           })
       end
 
       it 'returns a success response with items array having description and count of shipment items' do
@@ -47,18 +50,21 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # assert that expected body values are received
         body = response_body
-        expect(body.has_key?('shipment')).to eq(true)
-        expect(body['shipment']['company_id']).to eq(1)
-        expect(body['shipment']['destination_country']).to eq('NED')
-        expect(body['shipment']['origin_country']).to eq('ENG')
-        expect(body['shipment']['tracking_number']).to eq('ENG8765NED')
-        expect(body['shipment']['slug']).to eq('usps')
-        expect(body['shipment']['created_at']).to eq('2020 December 20 at 10:35 PM (Sunday)')
-        expect(body['shipment']['items']).to eq([
-                                                  { 'description' => 'Macbook', 'count' => 1 },
-                                                  { 'description' => 'Apple Watch', 'count' => 2 },
-                                                  { 'description' => 'iPhone', 'count' => 3 }
-                                                ])
+        expect(body).to eq({
+                             'shipment' => {
+                               'company_id' => 1,
+                               'destination_country' => 'NED',
+                               'origin_country' => 'ENG',
+                               'tracking_number' => 'ENG8765NED',
+                               'slug' => 'usps',
+                               'created_at' => '2020 December 20 at 10:35 PM (Sunday)',
+                               'items' => [
+                                 { 'description' => 'Macbook', 'count' => 1 },
+                                 { 'description' => 'Apple Watch', 'count' => 2 },
+                                 { 'description' => 'iPhone', 'count' => 3 }
+                               ]
+                             }
+                           })
       end
     end
 
@@ -79,10 +85,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('resource_not_found')
-        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=1 and 'company_id'=4")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'resource_not_found',
+                               'message' => "Couldn't find Shipment with 'id'=1 and 'company_id'=4",
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a not found response when a shipment with specified id is not present' do
@@ -103,10 +112,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('resource_not_found')
-        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=5 and 'company_id'=1")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'resource_not_found',
+                               'message' => "Couldn't find Shipment with 'id'=5 and 'company_id'=1",
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a not found response when a shipment with specified id and company_id is not present' do
@@ -125,10 +137,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('resource_not_found')
-        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=5 and 'company_id'=4")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'resource_not_found',
+                               'message' => "Couldn't find Shipment with 'id'=5 and 'company_id'=4",
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
     end
 
@@ -143,10 +158,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq("The request param are not valid.")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a bad request response when company id is invalid : string with only spaces' do
@@ -159,10 +177,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq("The request param are not valid.")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a bad request response when both id and company id is invalid' do
@@ -175,10 +196,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq("The request param are not valid.")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a bad request response when company id invalid : integer string with spaces' do
@@ -191,10 +215,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq("The request param are not valid.")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a bad request response when shipment id invalid : integer string with spaces' do
@@ -207,10 +234,13 @@ RSpec.describe "Specific Shipment API", type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq("The request param are not valid.")
-        expect(body['error']['type']).to eq("invalid_request_error")
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
     end
   end
