@@ -1,5 +1,5 @@
 class ShipmentsController < ApplicationController
-  before_action :validate_params, only: [:show, :tracking]
+  before_action :validate_params, only: [:show, :tracking, :search]
 
   def index
     @shipments = Shipment.all
@@ -21,6 +21,10 @@ class ShipmentsController < ApplicationController
     # Retrieve tracking information
     @tracking_info = AftershipClient.get_tracking_info(shipment.tracking_number)
     process_tracking_info
+  end
+
+  def search
+    @shipments = Shipment.includes(:shipment_items).where(company_id: params[:company_id], shipment_items_count: params[:shipment_items_size])
   end
 
   private

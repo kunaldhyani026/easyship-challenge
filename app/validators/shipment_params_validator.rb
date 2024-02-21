@@ -10,6 +10,8 @@ class ShipmentParamsValidator
       valid_for_show_action?
     when 'tracking'
       valid_for_tracking_action?
+    when 'search'
+      valid_for_search_action?
     else
       # default validation is false, to ensure not allow anyone bypass validation without writing validation logic
       false
@@ -26,6 +28,11 @@ class ShipmentParamsValidator
   # This method checks that params for tracking action are valid or not
   def valid_for_tracking_action?
     integer?(@params[:id]) && integer?(@params[:company_id])
+  end
+
+  # This method checks that params for search action are valid or not
+  def valid_for_search_action?
+    integer?(@params[:company_id]) && integer?(@params[:shipment_items_size]) && @params[:shipment_items_size].to_i >= 0
   end
 
   # This method checks that provided value is integer without any other string character or leading zeroes
