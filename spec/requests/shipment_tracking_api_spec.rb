@@ -33,10 +33,12 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # assert that expected body values are received
         body = response_body
-        expect(body['status']).to eq('InTransit')
-        expect(body['current_location']).to eq('Singapore Main Office, Singapore')
-        expect(body['last_checkpoint_message']).to eq('Received at Operations Facility')
-        expect(body['last_checkpoint_time']).to eq('Monday, 01 February 2016 at 1:00 PM')
+        expect(body).to eq({
+                             'status' => 'InTransit',
+                             'current_location' => 'Singapore Main Office, Singapore',
+                             'last_checkpoint_message' => 'Received at Operations Facility',
+                             'last_checkpoint_time' => 'Monday, 01 February 2016 at 1:00 PM'
+                           })
       end
     end
 
@@ -58,10 +60,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('resource_not_found')
-        expect(body['error']['message']).to eq('Tracking does not exist.')
-        expect(body['error']['type']).to eq('invalid_request_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'resource_not_found',
+                               'message' => 'Tracking does not exist.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
     end
 
@@ -76,10 +81,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('resource_not_found')
-        expect(body['error']['message']).to eq("Couldn't find Shipment with 'id'=2 and 'company_id'=1")
-        expect(body['error']['type']).to eq('invalid_request_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'resource_not_found',
+                               'message' => "Couldn't find Shipment with 'id'=2 and 'company_id'=1",
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
     end
 
@@ -94,10 +102,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq('The request param are not valid.')
-        expect(body['error']['type']).to eq('invalid_request_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
 
       it 'returns a bad request response when company id is invalid' do
@@ -110,10 +121,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('invalid_request')
-        expect(body['error']['message']).to eq('The request param are not valid.')
-        expect(body['error']['type']).to eq('invalid_request_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'invalid_request',
+                               'message' => 'The request param are not valid.',
+                               'type' => 'invalid_request_error'
+                             }
+                           })
       end
     end
 
@@ -128,10 +142,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('api_error')
-        expect(body['error']['message']).to eq('The API key is invalid.')
-        expect(body['error']['type']).to eq('Unauthorized')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'api_error',
+                               'message' => 'The API key is invalid.',
+                               'type' => 'Unauthorized'
+                             }
+                           })
       end
     end
 
@@ -150,10 +167,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('api_error')
-        expect(body['error']['message']).to eq('Failed to parse response body as JSON')
-        expect(body['error']['type']).to eq('api_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'api_error',
+                               'message' => 'Failed to parse response body as JSON',
+                               'type' => 'api_error'
+                             }
+                           })
       end
     end
 
@@ -170,10 +190,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('api_error')
-        expect(body['error']['message']).to eq('Internal Server Error')
-        expect(body['error']['type']).to eq('http_network_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'api_error',
+                               'message' => 'Internal Server Error',
+                               'type' => 'http_network_error'
+                             }
+                           })
       end
 
       it 'returns a specific 500 api_error response when HTTPBadGateway response is received' do
@@ -188,10 +211,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('api_error')
-        expect(body['error']['message']).to eq('Internal Server Error')
-        expect(body['error']['type']).to eq('http_network_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'api_error',
+                               'message' => 'Internal Server Error',
+                               'type' => 'http_network_error'
+                             }
+                           })
       end
 
       it 'returns a specific 500 api_error response when HTTPGatewayTimeout response is received' do
@@ -206,10 +232,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('api_error')
-        expect(body['error']['message']).to eq('Internal Server Error')
-        expect(body['error']['type']).to eq('http_network_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'api_error',
+                               'message' => 'Internal Server Error',
+                               'type' => 'http_network_error'
+                             }
+                           })
       end
 
       it 'returns a specific 500 api_error response when HTTPInternalServerError response is received' do
@@ -224,10 +253,13 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
         # asserting that response body have error details
         body = response_body
-        expect(body.has_key?('error')).to eq(true)
-        expect(body['error']['code']).to eq('api_error')
-        expect(body['error']['message']).to eq('Internal Server Error')
-        expect(body['error']['type']).to eq('http_network_error')
+        expect(body).to eq({
+                             'error' => {
+                               'code' => 'api_error',
+                               'message' => 'Internal Server Error',
+                               'type' => 'http_network_error'
+                             }
+                           })
       end
     end
   end
