@@ -6,7 +6,7 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    @shipment = Shipment.find_by(id: params[:id], company_id: params[:company_id])
+    @shipment = Shipment.includes(:shipment_items).find_by(id: params[:id], company_id: params[:company_id])
     return if @shipment
 
     error_message = "Couldn't find Shipment with 'id'=#{params[:id]} and 'company_id'=#{params[:company_id]}"
