@@ -23,6 +23,9 @@ class ShipmentsController < ApplicationController
     process_tracking_info
   end
 
+  # We are using counter_cache for caching the count of Shipment's associated items.
+  # The count gets updated everytime we perform rails create/update/destroy of shipment_item.
+  # This space vs time tradeoff helps us in reducing the sql joins and count query call everytime we want to search a shipment by its items size.
   def search
     @shipments = Shipment.includes(:shipment_items).where(company_id: params[:company_id], shipment_items_count: params[:shipment_items_size])
   end
