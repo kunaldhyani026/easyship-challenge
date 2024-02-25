@@ -133,7 +133,10 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
     context 'when Aftership API key is invalid' do
       it 'returns a 401 Unauthorized response' do
-        # Trigger API call - This actually calls Aftership endpoint with a bad as-api-key, which leads to 401 error
+        # Simulating Aftership endpoint with a bad as-api-key, which leads to 401 error
+        allow(AftershipClient).to receive(:get_tracking_info).and_return({:meta => {:errors => [], :message => 'The API key is invalid.', :type =>'Unauthorized', :code => 401}, :data =>{}})
+
+        # Trigger API call
         headers = { 'Content-Type' => 'application/json' }
         get '/companies/1/shipments/1/tracking', headers: headers
 
@@ -154,7 +157,7 @@ RSpec.describe 'Shipment Tracking API', type: :request do
 
     context 'when encountering a JSON::ParserError' do
       before do
-        allow(AftershipClient).to receive(:parse_http_response).and_raise(JSON::ParserError)
+        allow(AftershipClient).to receive(:trigger_http_request).and_raise(JSON::ParserError)
       end
 
       it 'returns a specific 500 api_error response' do
