@@ -46,7 +46,7 @@ class AftershipClient
   private_class_method def self.parse_http_response(response)
     if server_error?(response)
       Rails.logger.error("<<<<< Server Error occurred on Aftership API : #{response.message} >>>>>")
-      return { meta: { code: 500, message: 'Internal Server Error', type: 'http_network_error' } } if server_error?(response)
+      return { meta: { code: 500, message: 'Internal Server Error', type: 'http_network_error' } }
     end
 
     JSON.parse(response.read_body).with_indifferent_access
