@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :companies, only: [] do
     resources :shipments, only: [:show] do
       get 'tracking', on: :member
+      post 'search', on: :collection
     end
   end
 end

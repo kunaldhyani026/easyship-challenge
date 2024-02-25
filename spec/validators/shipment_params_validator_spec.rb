@@ -148,7 +148,79 @@ RSpec.describe ShipmentParamsValidator do
       end
     end
 
-    context 'when action neither show nor tracking' do
+    context 'when action is search' do
+      it 'returns true when both company_id and shipment_items_size are valid postive integers' do
+        validator = ShipmentParamsValidator.new({ action: 'search', company_id: 2, shipment_items_size: 1 })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns true when both shipment_items_size and company_id are valid integers in string format' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: '1', company_id: '-2' })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns true when both company_id is negative but shipment_items_size is positive' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: 12, company_id: -2 })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns true when both shipment_items_size and company_id are valid integers' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: 0, company_id: 12 })
+        expect(validator.validate).to eq(true)
+      end
+
+      it 'returns false when either shipment_items_size and company_id have space string character' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: 1, company_id: ' 2' })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either shipment_items_size and company_id have string character' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: '5invalid', company_id: 1 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either shipment_items_size and company_id have integer string starting with 0' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: '01', company_id: 2 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either shipment_items_size and company_id is float' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: 1, company_id: 2.56 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either shipment_items_size and company_id is empty string' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: '', company_id: '' })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when either shipment_items_size and company_id is string with spaces ' do
+        validator = ShipmentParamsValidator.new({ action: 'search', shipment_items_size: '    ', company_id: 2 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when shipment_items_size is missing ' do
+        validator = ShipmentParamsValidator.new({ action: 'search', company_id: 1 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when company_id is missing ' do
+        validator = ShipmentParamsValidator.new({ action: 'search',  shipment_items_size: 1 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when shipment_items_size is nil ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', shipment_items_size: nil, company_id: 2 })
+        expect(validator.validate).to eq(false)
+      end
+
+      it 'returns false when company_id is nil ' do
+        validator = ShipmentParamsValidator.new({ action: 'tracking', shipment_items_size: 12, company_id: nil })
+        expect(validator.validate).to eq(false)
+      end
+    end
+
+    context 'when action not show, tracking and search' do
       it 'returns false' do
         validator = ShipmentParamsValidator.new({ action: 'other' })
         expect(validator.validate).to eq(false)
