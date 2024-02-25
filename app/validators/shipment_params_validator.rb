@@ -8,6 +8,8 @@ class ShipmentParamsValidator
     case action
     when 'show'
       valid_for_show_action?
+    when 'tracking'
+      valid_for_tracking_action?
     else
       # default validation is false, to ensure not allow anyone bypass validation without writing validation logic
       false
@@ -18,6 +20,11 @@ class ShipmentParamsValidator
 
   # This method checks that params for show action are valid or not
   def valid_for_show_action?
+    integer?(@params[:id]) && integer?(@params[:company_id])
+  end
+
+  # This method checks that params for tracking action are valid or not
+  def valid_for_tracking_action?
     integer?(@params[:id]) && integer?(@params[:company_id])
   end
 

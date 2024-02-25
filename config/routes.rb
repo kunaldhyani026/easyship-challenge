@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :shipments, only: [:index]
 
   resources :companies, only: [] do
-    resources :shipments, only: [:show]
+    resources :shipments, only: [:show] do
+      get 'tracking', on: :member
+    end
   end
 end
